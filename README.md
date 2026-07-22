@@ -71,3 +71,5 @@
       bash /opt/crave/github-actions/upload.sh 'tag' 'device' 'https://github.com/woaiduling2/manifests' 'release title' ''
       rm token.txt
       ```
+- ## small tips
+  - don't use cat xxx.txt in crave run command,crave will check your command,and then just return 1 err.
