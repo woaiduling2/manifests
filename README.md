@@ -58,12 +58,12 @@
       du -sh kernel/* | sort -h;\
       df -h"
       ```
-  - 3.pull out zip from container
+  - 4.pull out zip from container
     - ```
       cd Lineage20
       crave pull out/target/product/*/*.zip
       ```
-  - 4.upload it to the the github(wait for,i didn't test it)
+  - 5.upload it to the the github(wait for,i didn't test it)
     - ```
       cd Lineage20
       echo "Your GitHub PAT" > token.txt
