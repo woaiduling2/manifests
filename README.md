@@ -31,7 +31,7 @@
   - 3.success command base my experience,may be not beautiful
     - why i use so many rm for out directory,beacuse crave.io container prompt me disk space exhaust
     - why i rm -rf vendor/google/flame vendor/google/coral,because resync.sh didn't sync it,cause a compile err
-    - why i replace https://github.com/TheMuppets/manifests to https://github.com/woaiduling2/manifests,beacuse it download many other device vendor,and exhaust disk space
+    - why i replace [TheMuppets/manifests](https://github.com/TheMuppets/manifests) to [woaiduling2/manifests](https://github.com/woaiduling2/manifests) beacuse it download many other device vendor,and exhaust disk space
     - ```
       cd Lineage20
       crave -n run --detached --no-patch -- "df -h;\
