@@ -1,0 +1,72 @@
+- ## summary
+  - this is a user to comile LineageOS-20.0(android 13) for pixel 4 on crave.io's note.
+  - device
+      - pixel4
+  - environment
+    - windows 10
+    - ubuntu-22.04 base on wsl2
+  - as far as I know  
+    - devspace is a remote place to run 'crave run' command,don't do other things in devspace to avoid ban.
+    - don't use rm -rf Lineage20,otherwise your account will be ban.
+        - need a new container for your development,please use crave discard and wait the successful email send to you.
+        - need a new Lineage20 template folder,please use crave clone destroy.
+    - git clone a repo,recommand use --depth 1
+    - don't use repo sync,recommand use /opt/crave/resync.sh better.
+    - don't use m clean/mka clean/make clean,otherwise your account will be ban.
+    - crave run once,received successful/fail email once,don't run twice for you compile.
+    - perhaps there are other rules in the wiki,but they rarely lead to ban.
+
+- ## everything should be based on the official wiki.
+  - [offical wiki](https://fosson.top/crave/getting-started/introduction.html)
+
+- ## base my experience
+  - 1.enter devspace
+    - ```
+      ./crave-0.2-7220-linux-amd64.bin  -n -c crave.conf devspace
+      ```
+  - 2.create template(don't modify Lineage20,the wiki recommand we use this directory name)
+    - ```
+      crave clone create Lineage20 --projectID 36
+      ```
+  - 3.success command base my experience,may be not beautiful
+    - why i use so many rm for out directory,beacuse crave.io container prompt me disk space exhaust
+    - why i rm -rf vendor/google/flame vendor/google/coral,because resync.sh didn't sync it,cause a compile err
+    - why i replace https://github.com/TheMuppets/manifests to https://github.com/woaiduling2/manifests,beacuse it download many other device vendor,and exhaust disk space
+    - ```
+      cd Lineage20
+      crave -n run --detached --no-patch -- "df -h;\
+      rm -rf out/soong/.intermediates;\
+      wget https://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2_amd64.deb && sudo dpkg -i libtinfo5_6.3-2_amd64.deb && rm -f libtinfo5_6.3-2_amd64.deb;\
+      wget https://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libncurses5_6.3-2_amd64.deb && sudo dpkg -i libncurses5_6.3-2_amd64.deb && rm -f libncurses5_6.3-2_amd64.deb;\
+      rm -rf .repo/local_manifests;\
+      git clone https://github.com/woaiduling2/manifests --depth 1 -b lineage-20.0 .repo/local_manifests;\
+      rm -rf vendor/google/flame vendor/google/coral;\
+      /opt/crave/resync.sh;\
+      source build/envsetup.sh;\
+      mka installclean;\
+      df -h;\
+      du -sh out/* | sort -h;\
+      du -sh out/soong/* | sort -h;\
+      du -sh vendor/* | sort -h;\
+      du -sh device/* | sort -h;\
+      du -sh kernel/* | sort -h;\
+      brunch flame;\
+      du -sh out/* | sort -h;\
+      du -sh out/soong/* | sort -h;\
+      du -sh vendor/* | sort -h;\
+      du -sh device/* | sort -h;\
+      du -sh kernel/* | sort -h;\
+      df -h"
+      ```
+  - 3.pull out zip from container
+    - ```
+      cd Lineage20
+      crave pull out/target/product/*/*.zip
+      ```
+  - 4.upload it to the the github(wait for,i didn't test it)
+    - ```
+      cd Lineage20
+      echo "Your GitHub PAT" > token.txt
+      bash /opt/crave/github-actions/upload.sh 'tag' 'device' 'https://github.com/woaiduling2/manifests' 'release title' ''
+      rm token.txt
+      ```
