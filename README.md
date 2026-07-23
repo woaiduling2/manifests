@@ -59,7 +59,7 @@
       du -sh kernel/* | sort -h;\
       df -h"
       ```
-  - 4.After the last step succeeds, we can upload the target zip to GitHub Releases(I tried /opt/crave/github-actions/upload.sh, but it fails when the extra file parameter is empty, so I use the following command)
+  - 4.After the last step succeeds, we can upload the target zip to GitHub Releases
     - ```
       cd Lineage20
       crave -n run --detached --no-patch -- "df -h;\
@@ -75,26 +75,7 @@
       du -sh vendor/google/flame/* | sort -h;\
       du -sh device/* | sort -h;\
       du -sh kernel/* | sort -h;\
-      brunch flame && { \
-        if ! command -v gh >/dev/null 2>&1; then curl -sS https://webi.sh/gh | sh; export PATH=\"\$HOME/.local/bin:\$PATH\"; fi;\
-        gh auth login --with-token < token.txt;\
-        ZIP=\$(ls out/target/product/flame/*.zip 2>/dev/null | head -n1);\
-        if [ -z \"\$ZIP\" ]; then echo 'No zip file found.'; exit 1; fi;\
-        SIZE=\$(stat -c%s \"\$ZIP\");\
-        LIMIT=2147483648;\
-        TAG=\"flame-\$(date +%Y%m%d-%H%M%S)\";\
-        if [ \"\$SIZE\" -le \"\$LIMIT\" ]; then \
-          gh release create \"\$TAG\" --repo woaiduling2/manifests --title \"official flame\" --notes \"\" \"\$ZIP\";\
-        else \
-          echo 'File exceeds 2 GiB, splitting...';\
-          split -b 2G \"\$ZIP\" \"\${ZIP}.part-\";\
-          for part in \"\${ZIP}.part-\"*; do \
-            gh release upload \"\$TAG\" \"\$part\" --repo woaiduling2/manifests --clobber;\
-          done;\
-          gh release edit \"\$TAG\" --repo woaiduling2/manifests --notes \"File exceeds 2 GiB, split into parts. To merge: cat \${ZIP##*/}.part-* > \${ZIP##*/}\";\
-          echo 'Split into parts and uploaded.';\
-        fi;\
-      };\
+      brunch flame && bash /opt/crave/github-actions/upload.sh 'flame-v.0.0.1' 'flame' 'https://github.com/woaiduling2/manifests' 'official flame';\
       du -sh out/* | sort -h;\
       du -sh out/soong/* | sort -h;\
       du -sh vendor/* | sort -h;\
