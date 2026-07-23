@@ -89,3 +89,4 @@
       
 - ## small tips
   - don't use cat xxx.txt in crave run command,crave will check your command,and then just return 1 err.
+  - When the queue is heavy, `crave run` may also return exit code 1 (error). This could be due to the administrator or the Crave server causing some runs to fail. If this happens, simply re-run the command and be patient.
