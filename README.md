@@ -14,6 +14,7 @@
     - git clone a repo,recommand use --depth 1
     - don't use repo sync,recommand use /opt/crave/resync.sh better.
     - don't use m clean/mka clean/make clean,otherwise your account will be ban.
+    - dont't use -j value,otherwise your account will be ban.
     - crave run once,received successful/fail email once,don't run twice for you compile.
     - perhaps there are other rules in the wiki,but they rarely lead to ban.
 
@@ -59,7 +60,7 @@
       du -sh kernel/* | sort -h;\
       df -h"
       ```
-  - 4.After the last step succeeds, we can upload the target zip to GitHub Releases
+  - 4.After the last step succeeds, we can upload the target zip to GitHub Releases(Be careful,the release title don't use blank,offical script dont't support it,just use 'official-flame' otherwise 'official flame'
     - ```
       cd Lineage20
       crave -n run --detached --no-patch -- "df -h;\
@@ -75,7 +76,7 @@
       du -sh vendor/google/flame/* | sort -h;\
       du -sh device/* | sort -h;\
       du -sh kernel/* | sort -h;\
-      brunch flame && bash /opt/crave/github-actions/upload.sh 'flame-v.0.0.1' 'flame' 'https://github.com/woaiduling2/manifests' 'official flame';\
+      brunch flame && bash /opt/crave/github-actions/upload.sh 'flame-v.0.0.1' 'flame' 'https://github.com/woaiduling2/manifests' 'official-flame';\
       du -sh out/* | sort -h;\
       du -sh out/soong/* | sort -h;\
       du -sh vendor/* | sort -h;\
