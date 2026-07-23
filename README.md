@@ -59,7 +59,7 @@
       du -sh kernel/* | sort -h;\
       df -h"
       ```
-  - 4.once success base last step,we can upload the target zip to the github relase(i already try /opt/crave/github-actions/upload.sh,it fail,and i didn't has it code,so i use below command)
+  - 4.After the last step succeeds, we can upload the target zip to GitHub Releases(I tried /opt/crave/github-actions/upload.sh, but it fails when the extra file parameter is empty, so I use the following command)
     - ```
       cd Lineage20
       crave -n run --detached --no-patch -- "df -h;\
