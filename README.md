@@ -59,17 +59,51 @@
       du -sh kernel/* | sort -h;\
       df -h"
       ```
-  - 4.pull out zip from container
+  - 4.once success base last step,we can upload the target zip to the github relase(i already try /opt/crave/github-actions/upload.sh,it fail,and i didn't has it code,so i use below command)
     - ```
       cd Lineage20
-      crave pull out/target/product/*/*.zip
+      crave -n run --detached --no-patch -- "df -h;\
+      wget https://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2_amd64.deb && sudo dpkg -i libtinfo5_6.3-2_amd64.deb && rm -f libtinfo5_6.3-2_amd64.deb;\
+      wget https://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libncurses5_6.3-2_amd64.deb && sudo dpkg -i libncurses5_6.3-2_amd64.deb && rm -f libncurses5_6.3-2_amd64.deb;\
+      source build/envsetup.sh;\
+      mka installclean;\
+      df -h;\
+      du -sh out/* | sort -h;\
+      du -sh out/soong/* | sort -h;\
+      du -sh vendor/* | sort -h;\
+      du -sh vendor/google/* | sort -h;\
+      du -sh vendor/google/flame/* | sort -h;\
+      du -sh device/* | sort -h;\
+      du -sh kernel/* | sort -h;\
+      brunch flame && { \
+        if ! command -v gh >/dev/null 2>&1; then curl -sS https://webi.sh/gh | sh; export PATH=\"\$HOME/.local/bin:\$PATH\"; fi;\
+        gh auth login --with-token < token.txt;\
+        ZIP=\$(ls out/target/product/flame/*.zip 2>/dev/null | head -n1);\
+        if [ -z \"\$ZIP\" ]; then echo 'No zip file found.'; exit 1; fi;\
+        SIZE=\$(stat -c%s \"\$ZIP\");\
+        LIMIT=2147483648;\
+        TAG=\"flame-\$(date +%Y%m%d-%H%M%S)\";\
+        if [ \"\$SIZE\" -le \"\$LIMIT\" ]; then \
+          gh release create \"\$TAG\" --repo woaiduling2/manifests --title \"official flame\" --notes \"\" \"\$ZIP\";\
+        else \
+          echo 'File exceeds 2 GiB, splitting...';\
+          split -b 2G \"\$ZIP\" \"\${ZIP}.part-\";\
+          for part in \"\${ZIP}.part-\"*; do \
+            gh release upload \"\$TAG\" \"\$part\" --repo woaiduling2/manifests --clobber;\
+          done;\
+          gh release edit \"\$TAG\" --repo woaiduling2/manifests --notes \"File exceeds 2 GiB, split into parts. To merge: cat \${ZIP##*/}.part-* > \${ZIP##*/}\";\
+          echo 'Split into parts and uploaded.';\
+        fi;\
+      };\
+      du -sh out/* | sort -h;\
+      du -sh out/soong/* | sort -h;\
+      du -sh vendor/* | sort -h;\
+      du -sh vendor/google/* | sort -h;\
+      du -sh vendor/google/flame/* | sort -h;\
+      du -sh device/* | sort -h;\
+      du -sh kernel/* | sort -h;\
+      df -h"
       ```
-  - 5.upload it to the the github(wait for,i didn't test it)
-    - ```
-      cd Lineage20
-      echo "Your GitHub PAT" > token.txt
-      bash /opt/crave/github-actions/upload.sh 'tag' 'device' 'https://github.com/woaiduling2/manifests' 'release title' ''
-      rm token.txt
-      ```
+      
 - ## small tips
   - don't use cat xxx.txt in crave run command,crave will check your command,and then just return 1 err.
