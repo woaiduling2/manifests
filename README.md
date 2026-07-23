@@ -10,7 +10,7 @@
     - don't use rm -rf Lineage20,otherwise your account will be ban.
         - need a new container for your development,please use crave discard and wait the successful email send to you.
         - need a new Lineage20 template folder,please use crave clone destroy.
-    - don't use soong in devspace,otherwise your account will be ban. 
+    - don't use soong_ui in devspace,otherwise your account will be ban. 
     - git clone a repo,recommand use --depth 1
     - don't use repo sync,recommand use /opt/crave/resync.sh better.
     - don't use m clean/mka clean/make clean,otherwise your account will be ban.
