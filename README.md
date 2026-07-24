@@ -87,6 +87,15 @@
       df -h"
       ```
       
+  - 5.after previous step success,we can simply command like below.
+    - ```
+      cd Lineage20
+      crave -n run --detached --no-patch -- "rm -f out/target/product/flame/*.zip out/target/product/flame/*.img;\
+      source build/envsetup.sh;\
+      brunch flame && bash /opt/crave/github-actions/upload.sh 'flame-v.0.0.1' 'flame' 'https://github.com/woaiduling2/manifests' 'official-flame';\
+      df -h"
+      ```
+      
 - ## small tips
   - don't use cat xxx.txt in crave run command,crave will check your command,and then just return 1 err.
   - When the queue is heavy, `crave run` may also return exit code 1 (error). This could be due to the administrator or the Crave server causing some runs to fail. If this happens, simply re-run the command and be patient.
