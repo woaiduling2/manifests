@@ -99,3 +99,6 @@
 - ## small tips
   - don't use cat xxx.txt in crave run command,crave will check your command,and then just return 1 err.
   - When the queue is heavy, `crave run` may also return exit code 1 (error). This could be due to the administrator or the Crave server causing some runs to fail. If this happens, simply re-run the command and be patient.
+ 
+- ## experience
+  - After running `crave run` several times, I felt really frustrated: there were always about 30 tasks ahead of mine, and my task would often be cancelled at random even though I hadn't broken any rules, among other issues. So, if I hadn't paid for tokens, I would have had to use a local machine to build my code.
